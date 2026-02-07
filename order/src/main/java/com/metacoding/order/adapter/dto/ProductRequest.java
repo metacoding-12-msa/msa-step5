@@ -1,4 +1,10 @@
 package com.metacoding.order.adapter.dto;
 
-public class ProductRequest {   
+public record ProductRequest(
+    int productId,
+    int quantity,
+    Long price
+) {
 }
+
+    

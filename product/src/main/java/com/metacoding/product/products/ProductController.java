@@ -16,11 +16,6 @@ public class ProductController {
         return Resp.ok(productService.findById(productId));
     }
 
-    @GetMapping
-    public ResponseEntity<?> getProducts() {
-        return Resp.ok(productService.findAll());
-    }
-
     @PutMapping("/{productId}/decrease")
     public ResponseEntity<?> decreaseQuantity(@PathVariable("productId") int productId, @RequestBody ProductRequest requestDTO) {
         return Resp.ok(productService.decreaseQuantity(productId, requestDTO.quantity(), requestDTO.price()));

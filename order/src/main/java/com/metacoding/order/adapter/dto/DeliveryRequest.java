@@ -1,4 +1,9 @@
 package com.metacoding.order.adapter.dto;
 
-public class DeliveryRequest {
+public record DeliveryRequest(
+    int orderId,
+    String address
+) {
 }
+
+
