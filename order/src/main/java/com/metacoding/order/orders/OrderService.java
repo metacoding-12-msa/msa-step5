@@ -47,7 +47,7 @@ public class OrderService {
 
             // 5. 주문 완료
             createdOrder.complete();
-            return OrderResponse.from(createdOrder);
+            return OrderResponse.from(createdOrder,createdOrderItems);
 
         } catch (Exception e) {
             // 배달 취소
@@ -68,12 +68,14 @@ public class OrderService {
     public OrderResponse findById(int orderId) {
         Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception404("주문을 찾을 수 없습니다."));
-        return OrderResponse.from(findOrder);
+        List<OrderItem> findOrderItems = orderItemRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new Exception404("주문 아이템을 찾을 수 없습니다."));
+        return OrderResponse.from(findOrder, findOrderItems);
     }
 
     @Transactional
     public OrderResponse cancelOrder(int orderId) {
-        Order cancelledOrder = orderRepository.findById(orderId)
+        Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception404("주문을 찾을 수 없습니다."));
 
         List<OrderItem> findOrderItems = orderItemRepository.findByOrderId(orderId)
@@ -82,7 +84,7 @@ public class OrderService {
         findOrderItems.forEach(item -> productClient.increaseQuantity(
                 new ProductRequest(item.getProductId(), item.getQuantity(), item.getPrice())
         ));
-        cancelledOrder.cancel();
-        return OrderResponse.from(cancelledOrder);
+        findOrder.cancel();
+        return OrderResponse.from(findOrder);
     }
 }
