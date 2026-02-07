@@ -1,6 +1,6 @@
 package com.metacoding.delivery.deliveries;
 
-import com.metacoding.delivery.core.handler.ex.Exception404;
+import com.metacoding.delivery.core.handler.ex.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +12,11 @@ public class DeliveryService {
 
     @Transactional
     public DeliveryResponse createDelivery(int orderId, String address) {
-        Delivery savedDelivery = Delivery.create(orderId, address);
-        deliveryRepository.save(savedDelivery);
-        savedDelivery.complete();
-        return DeliveryResponse.from(savedDelivery);
+        // 1. 배달 생성
+        Delivery createdDelivery = deliveryRepository.save(Delivery.create(orderId, address));
+        // 2. 배달 완료
+        createdDelivery.complete();
+        return DeliveryResponse.from(createdDelivery);
     }
 
     public DeliveryResponse findById(int deliveryId) {
