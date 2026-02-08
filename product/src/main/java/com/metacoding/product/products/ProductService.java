@@ -4,7 +4,6 @@ import com.metacoding.product.core.handler.ex.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +24,7 @@ public class ProductService {
         if (findProduct.getQuantity() < quantity) {
             throw new Exception400("상품 재고가 부족합니다.");
         }
-        if (!Objects.equals(findProduct.getPrice(), price)) {
+        if (!price.equals(findProduct.getPrice())) {
             throw new Exception400("상품 가격이 일치하지 않습니다.");
         }
         findProduct.decreaseQuantity(quantity);
@@ -36,7 +35,7 @@ public class ProductService {
     public ProductResponse increaseQuantity(int productId, int quantity, Long price) {
         Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new Exception404("상품이 없습니다."));
-        if (!Objects.equals(findProduct.getPrice(), price)) {
+        if (!price.equals(findProduct.getPrice())) {
             throw new Exception400("상품 가격이 일치하지 않습니다.");
         }
         findProduct.increaseQuantity(quantity);
