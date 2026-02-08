@@ -23,7 +23,6 @@ public class DeliveryController {
 
     @PutMapping("/{orderId}")
     public ResponseEntity<?> cancelDelivery(@PathVariable("orderId") int orderId) {
-        deliveryService.cancelDelivery(orderId);
-        return Resp.ok(null);
+        return Resp.ok(deliveryService.cancelDelivery(orderId));
     }
 }
