@@ -84,6 +84,9 @@ public class OrderService {
         findOrderItems.forEach(item -> productClient.increaseQuantity(
                 new ProductRequest(item.getProductId(), item.getQuantity(), item.getPrice())
         ));
+        // 배달 취소
+        deliveryClient.cancelDelivery(orderId);
+        // 주문 취소
         findOrder.cancel();
         return OrderResponse.from(findOrder);
     }
