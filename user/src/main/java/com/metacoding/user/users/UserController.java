@@ -7,7 +7,6 @@ import com.metacoding.user.core.util.Resp;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -16,7 +15,7 @@ public class UserController {
         return Resp.ok(userService.login(requestDTO.username(), requestDTO.password()));
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/api/users/{userId}")
     public ResponseEntity<?> getUser(@PathVariable("userId") int userId) {
         return Resp.ok(userService.findById(userId));
     }
