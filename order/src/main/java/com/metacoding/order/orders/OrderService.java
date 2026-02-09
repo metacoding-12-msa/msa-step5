@@ -51,7 +51,7 @@ public class OrderService {
 
         } catch (Exception e) {
             // 배달 취소
-            if (deliveryCreated && createdOrder != null) {
+            if (deliveryCreated) {
                 deliveryClient.cancelDelivery(createdOrder.getId());
             }
 
@@ -77,7 +77,9 @@ public class OrderService {
     public OrderResponse cancelOrder(int orderId) {
         Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception404("주문을 찾을 수 없습니다."));
-
+        if(findOrder.getStatus() == OrderStatus.CANCELLED) {
+            throw new Exception400("주문이 이미 취소되었습니다.");
+        }
         List<OrderItem> findOrderItems = orderItemRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new Exception404("주문 아이템을 찾을 수 없습니다."));
         // 상품 재고 복구

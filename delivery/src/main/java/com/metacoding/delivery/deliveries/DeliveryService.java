@@ -29,6 +29,9 @@ public class DeliveryService {
     public DeliveryResponse cancelDelivery(int orderId) {
         Delivery findDelivery = deliveryRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new Exception404("배달 정보를 조회할 수 없습니다."));
+        if(findDelivery.getStatus() == DeliveryStatus.CANCELLED) {
+            throw new Exception400("배달이 이미 취소되었습니다.");
+        }
         findDelivery.cancel();
         return DeliveryResponse.from(findDelivery);
     }
